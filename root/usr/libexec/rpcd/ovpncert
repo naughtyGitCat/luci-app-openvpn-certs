@@ -121,14 +121,13 @@ call)
 		rm -rf "$PKI"
 		easyrsa init-pki >/tmp/ovpncert.log 2>&1            || err "init-pki failed (see /tmp/ovpncert.log)"
 		EASYRSA_REQ_CN="$v_cn" easyrsa build-ca nopass >>/tmp/ovpncert.log 2>&1 || err "build-ca failed"
-		easyrsa gen-dh >>/tmp/ovpncert.log 2>&1             || err "gen-dh failed"
+		# ECDH (dh none) — avoids the very slow gen-dh on weak routers; modern & secure
 		easyrsa build-server-full "$SERVER_CN" nopass >>/tmp/ovpncert.log 2>&1 || err "build-server failed"
 		easyrsa gen-crl >>/tmp/ovpncert.log 2>&1            || true
 		# only touch the live server files when explicitly applying
 		if [ "$v_apply" = "1" ] || [ "$v_apply" = "true" ]; then
 			mkdir -p "$OVPN_DIR"
 			cp "$PKI/ca.crt"                   "$OVPN_DIR/ca.crt"
-			cp "$PKI/dh.pem"                   "$OVPN_DIR/dh.pem"     2>/dev/null
 			cp "$PKI/issued/${SERVER_CN}.crt"  "$OVPN_DIR/server.crt"
 			cp "$PKI/private/${SERVER_CN}.key" "$OVPN_DIR/server.key"
 			[ -f "$PKI/crl.pem" ] && cp "$PKI/crl.pem" "$OVPN_DIR/crl.pem"
@@ -136,7 +135,7 @@ call)
 			uci -q set "openvpn.${INSTANCE}.ca=${OVPN_DIR}/ca.crt"
 			uci -q set "openvpn.${INSTANCE}.cert=${OVPN_DIR}/server.crt"
 			uci -q set "openvpn.${INSTANCE}.key=${OVPN_DIR}/server.key"
-			uci -q set "openvpn.${INSTANCE}.dh=${OVPN_DIR}/dh.pem"
+			uci -q set "openvpn.${INSTANCE}.dh=none"
 			uci -q commit openvpn
 			/etc/init.d/openvpn restart >/dev/null 2>&1
 		fi
