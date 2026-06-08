@@ -1,0 +1,17 @@
+{
+	"luci-app-openvpn-certs": {
+		"description": "Grant access to OpenVPN certificate management",
+		"read": {
+			"ubus": {
+				"ovpncert": [ "status", "list", "get_settings", "ovpn" ]
+			},
+			"uci": [ "ovpncert", "openvpn" ]
+		},
+		"write": {
+			"ubus": {
+				"ovpncert": [ "init_pki", "issue", "revoke", "set_settings" ]
+			},
+			"uci": [ "ovpncert", "openvpn" ]
+		}
+	}
+}

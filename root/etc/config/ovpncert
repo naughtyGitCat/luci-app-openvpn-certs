@@ -1,0 +1,13 @@
+
+config ovpncert 'config'
+	# easy-rsa PKI 目录(app 自建,默认即可)
+	option pki_dir '/etc/easy-rsa/pki'
+	# 要管理的 OpenVPN server 实例名(/etc/config/openvpn 里的 section 名)
+	option ovpn_instance 'myvpn'
+	# server 证书的 CN(init PKI 时生成,列表里会被隐藏)
+	option server_cn 'server'
+	# 客户端连入用的地址 —— 留空则尝试读实例的 ddns 选项;请填你的 DDNS 或公网 IP
+	option remote ''
+	# 端口/协议 —— 留空则取 server 实例的 port/proto
+	option port ''
+	option proto ''

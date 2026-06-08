@@ -1,0 +1,15 @@
+#!/bin/sh
+# 首次安装:确保 ovpncert 配置存在,并刷新 rpcd ACL
+[ -f /etc/config/ovpncert ] || touch /etc/config/ovpncert
+uci -q get ovpncert.config >/dev/null 2>&1 || {
+	uci -q batch <<-EOF
+		set ovpncert.config=ovpncert
+		set ovpncert.config.pki_dir=/etc/easy-rsa/pki
+		set ovpncert.config.ovpn_instance=myvpn
+		set ovpncert.config.server_cn=server
+		commit ovpncert
+	EOF
+}
+rm -f /tmp/luci-indexcache
+/etc/init.d/rpcd reload 2>/dev/null
+exit 0

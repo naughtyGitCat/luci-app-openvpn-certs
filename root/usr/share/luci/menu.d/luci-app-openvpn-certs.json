@@ -1,0 +1,13 @@
+{
+	"admin/vpn/openvpn-certs": {
+		"title": "OpenVPN Certificates",
+		"order": 30,
+		"action": {
+			"type": "view",
+			"path": "openvpn-certs/overview"
+		},
+		"depends": {
+			"acl": [ "luci-app-openvpn-certs" ]
+		}
+	}
+}

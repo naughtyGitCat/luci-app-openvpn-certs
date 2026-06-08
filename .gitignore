@@ -1,0 +1,13 @@
+# 防止误提交任何密钥 / 证书 / 站点配置
+*.key
+*.crt
+*.pem
+*.ovpn
+*.p12
+*.csr
+pki/
+easy-rsa/
+# 构建产物
+*.ipk
+/tmp/
+.DS_Store
